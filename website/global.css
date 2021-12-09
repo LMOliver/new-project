@@ -1,0 +1,89 @@
+@import url('./cf-black-red.css');
+body {
+	margin: 1em;
+	padding: 0;
+	min-height: calc(100vh - 2em);
+	font-family: Consolas, sans-serif;
+}
+pre{
+	font-family: Consolas, sans-serif;
+}
+code{
+	font-family: Consolas, 'Courier New', Courier, monospace;
+}
+button{
+	/* font-size:medium;
+	border-radius: 0;
+	border:1px solid black;
+	padding-block: 0;
+	padding-inline: 0.25em; */
+	margin-inline-start: 0.25em;
+	margin-inline-end: 0.25em;
+	/* background: white; */
+}
+/* button:hover{
+	background: #ccc;
+}
+button:active{
+	background: #aaa;
+}
+button:focus{
+	outline: none;
+	border:1px solid blue;
+	background: #ccf;
+} */
+
+blockquote {
+	margin-inline-start: 0;
+	padding-left: 1em;
+	border-left: 0.5em solid rgb(192, 192, 192);
+	font-family: fangsong;
+}
+
+h1 {
+	margin-block-start: calc(1em / 2);
+	margin-block-end: calc(1em / 2);
+}
+h2 {
+	margin-block-start: calc(1em / 1.5);
+	margin-block-end: calc(1em / 1.5);
+}
+h3 {
+	margin-block-start: calc(1em / 1.17);
+	margin-block-end: calc(1em / 1.17);
+}
+h4 {
+	margin-block-start: 1em;
+	margin-block-end: 1em;
+}
+
+a {
+	text-decoration: none;
+	color: rgb(14, 144, 210);
+}
+a:focus,a:hover {
+	text-decoration: underline;
+	color: rgb(0, 96, 210);
+}
+a:active {
+	text-decoration: underline;
+	color: rgb(0, 0, 210);
+}
+
+q::before,q::after {
+	font-family: serif;
+	user-select: text;
+}
+
+em {
+	font-family: cursive;
+	font-style: normal;
+}
+
+textarea {
+	display: block;
+}
+
+label, summary {
+	cursor: pointer;
+}

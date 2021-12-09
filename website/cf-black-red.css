@@ -1,0 +1,9 @@
+.cf-black-red{
+	color:red;
+	font-weight: bold;
+	display: inline-block;
+}
+
+.cf-black-red:first-letter{
+	color:black;
+}

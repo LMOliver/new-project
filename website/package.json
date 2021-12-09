@@ -1,0 +1,15 @@
+{
+	"name": "website",
+	"version": "0.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"author": "LMOliver",
+	"license": "AGPL-3.0",
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite",
+		"preview": "vite build && vite preview",
+		"deploy": "./deploy.sh"
+	}
+}

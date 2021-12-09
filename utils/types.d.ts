@@ -1,0 +1,1 @@
+export type DeepArray<T extends Exclude<any, any[]>> = T | DeepArray<T>[];

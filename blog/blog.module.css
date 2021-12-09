@@ -1,0 +1,70 @@
+@media (min-width: 1000px) {
+	.root {
+		gap: 1em;
+		grid-template:
+		"header main tools" max-content
+		"nav main tools" max-content
+		"friends main tools" max-content
+		"hitokoto main tools" max-content
+		"empty1 main empty2" auto
+		/ 300px auto 300px;
+	}
+}
+@media (min-width:800px) and (max-width: 1000px) {
+	.root {
+		gap: 1em;
+		grid-template:
+		"header main" auto
+		"nav main" auto
+		"tools main" auto
+		"friends main" auto
+		"hitokoto main" auto
+		"empty1 main" auto
+		/ 300px auto;
+	}
+}
+@media (max-width: 800px) {
+	.root {
+		grid-template:
+		"header" auto
+		"nav" auto
+		"tools" auto
+		"main" auto
+		"hitokoto" auto
+		"friends" auto
+		/ auto;
+	}
+}
+
+.root {
+	display: grid;
+	/* background: fixed center / cover no-repeat url(some url); */
+}
+.root > header {
+	grid-area: header;
+	text-align: center;
+}
+.root > nav {
+	grid-area: nav;
+	text-align: center;
+}
+.root > nav > ul {
+	padding-left: unset;
+	list-style: none;
+}
+.root > .friends {
+	grid-area: friends;
+}
+.root > .friends > ul {	
+	padding-left: unset;
+	list-style: none;
+}
+.root > .tools {
+	grid-area: tools;
+}
+.root > .hitokoto {
+	grid-area: hitokoto;
+}
+.root > main {
+	grid-area: main;
+}
