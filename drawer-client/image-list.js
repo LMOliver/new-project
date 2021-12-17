@@ -1,8 +1,8 @@
 import { container } from '../components/container.css.js';
 import { loading } from '../components/loading.js';
 import { element as e, template as t, valueBox } from '../dynamic-dom/index.js';
-import { computed, makeSequenceDirty, map, Sequence, SequenceChangeType, useSequence, useSequenceDirty } from '../dynamic/dynamic.js';
-import { convertImage } from '../image-preprocessing/convert.js';
+import { computed, makeBoxDirty, map, SequenceChangeType, unbox, useSequence } from '../dynamic/dynamic.js';
+import { convertImage } from './image-preprocessing/convert.js';
 
 /**
  * @param {{ name: string; data: ImageBitmap; }} image
@@ -11,7 +11,7 @@ import { convertImage } from '../image-preprocessing/convert.js';
  */
 function processor(image, slot) {
 	/**
-	 * @param {import("../image-preprocessing/convert.js").ConvertOptions} convertConfig
+	 * @param {import("./image-preprocessing/convert.js").ConvertOptions} convertConfig
 	 */
 	async function qwq(convertConfig) {
 		const converted = await convertImage(image.data, convertConfig);
@@ -29,30 +29,52 @@ function processor(image, slot) {
 	}
 
 	const options = [
-		{ name: '上', step: 1, initial: 0 },
-		{ name: '下', step: 1, initial: 0 },
-		{ name: '左', step: 1, initial: 0 },
-		{ name: '右', step: 1, initial: 0 },
-		{ name: '缩放', step: 0.1, initial: 1 },
+		{ name: '上', step: 1, initial: 0, style: 'width:4em;' },
+		{ name: '下', step: 1, initial: 0, style: 'width:4em;' },
+		{ name: '左', step: 1, initial: 0, style: 'width:4em;' },
+		{ name: '右', step: 1, initial: 0, style: 'width:4em;' },
+		{ name: '宽', step: 1, placeholder: '自动', style: 'width:4em;' },
+		{ name: '高', step: 1, placeholder: '自动', style: 'width:4em;' },
 	];
-	const inputs = options.map(({ name, step, initial }) => {
-		const input = e('input', { type: 'number', min: 0, name, step, value: initial });
+	const inputs = options.map(({ name, step, initial = '', placeholder = false, style }) => {
+		const input = e('input', {
+			type: 'number',
+			min: 0,
+			name,
+			step,
+			value: initial,
+			placeholder,
+			style: style || false
+		});
 		return {
-			element: e('div', e('label', name, input)),
+			element: e('label', name, input),
 			box: valueBox(input),
 		};
 	});
 	const inputBoxes = inputs.map(input => input.box);
+	const inputElements = inputs.map(input => input.element);
 
-	const config = computed($ => {
-		const [top, bottom, left, right, scale] = inputBoxes.map($).map(Number);
+	const form = e('form', (([cU, cD, cL, cR, sW, sH]) => [
+		e('p', e('h4', '裁剪'), t`${cU} ${cD} ${cL} ${cR}`),
+		e('p', e('h4', '缩放'), t`${sW} ${sH}`),
+	])(inputElements));
+
+	/**@type {import('../dynamic/dynamic.js').Box<Promise<import('./image-preprocessing/convert.js').ConvertOptions>>} */
+	const config = computed(async $ => {
+		const [top, bottom, left, right] = inputBoxes.slice(0, 4).map($).map(Number);
+		const [width, height] = inputBoxes.slice(4, 6).map($).map(x => x === '' ? null : Number(x));
+
+		if (!form.reportValidity()) {
+			throw new Error('参数无效');
+		}
+
 		return {
 			clip: { top, bottom, left, right },
-			resize: { scale },
+			resize: { width, height },
 		};
 	});
 
-	const result = map(config, qwq);
+	const result = map(config, config => config.then(qwq));
 
 	const shortHint = map(result, result => loading(
 		result.then(x => x.converted).then(x => `${x.width}×${x.height}`),
@@ -64,7 +86,7 @@ function processor(image, slot) {
 
 	return e('details', { open: true, class: container },
 		e('summary', t`${image.name}（${shortHint}）`),
-		inputs.map(input => input.element),
+		form,
 		resultCanvas,
 		slot,
 	);
@@ -104,18 +126,20 @@ export function imageList() {
 		e('ul', { style: 'padding-left:0;' }, map(images, image => {
 			return e('li', { style: 'list-style-type:none;margin-block:1em;' },
 				processor(image,
-					e('button', {
-						$click: () => {
-							const index = images.current.findIndex(item => item.name === image.name);
-							changeImages([SequenceChangeType.delete, index, null]);
-						}
-					}, '删除'),
+					e('p',
+						e('button', {
+							$click: () => {
+								const index = images.current.findIndex(item => item.name === image.name);
+								changeImages([SequenceChangeType.delete, index, null]);
+							}
+						}, '删除'),
+					),
 				),
 			);
 		})),
 		e('label', {
 			class: container,
-			style: 'display:flex;height:200px;justify-content:center;align-items:center;',
+			style: 'display:inline-flex;justify-content:center;align-items:center;',
 			$dragover: event => event.preventDefault(),
 			$dragenter: event => event.preventDefault(),
 			$drop: event => {

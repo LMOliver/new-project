@@ -1,4 +1,3 @@
-import { element as e } from '../dynamic-dom/index.js';
 /**
  * @typedef {(next:import('./index.js').Handler)=>import('./index.js').Handler} Middleware
  */

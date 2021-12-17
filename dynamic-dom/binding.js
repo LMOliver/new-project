@@ -23,7 +23,7 @@ export function bind([box, set], input) {
 }
 
 /**
- * @param {HTMLInputElement|HTMLTextAreaElement} input 
+ * @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input 
  */
 export function valueBox(input) {
 	return makeBoxDirty(input.value, callback => {

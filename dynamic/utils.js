@@ -59,13 +59,17 @@ export function useRecord(initial) {
 	return { values: value, boxes };
 }
 
-/**@template T @param {import('./dynamic.js').Box<T>} box*/
-export function optimizeEqual(box) {
+/**
+ * @template T
+ * @param {import('./dynamic.js').Box<T>} box
+ * @param {(a:T,b:T)=>boolean} isEqual
+ */
+export function optimizeEqual(box, isEqual = Object.is) {
 	let current = unbox(box);
 	return makeBoxDirty(
 		current,
 		flatMap(box.changes, (change, callback) => {
-			if (!Object.is(change[2], current)) {
+			if (!isEqual(change[2], current)) {
 				current = change[2];
 				callback([SequenceChangeType.set, 0, current]);
 			}

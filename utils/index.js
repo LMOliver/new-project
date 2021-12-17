@@ -1,4 +1,7 @@
-import { ensure } from '../ensure/index.js';
+import { ensure } from '../ensure';
+import { useStorage } from '../components/storage.js';
+import { map, unbox } from '../dynamic';
+import { optimizeEqual } from '../dynamic/utils.js';
 
 /**
  * @template T
@@ -47,28 +50,29 @@ export function createImageElement(blob) {
 }
 
 /**
+ * @template {'GET'|'POST'|'HEAD'|'PUT'|'DELETE'} M
  * @template T
  * @template U
  * @param {string} url 
- * @param {'GET'|'POST'|'HEAD'|'PUT'|'DELETE'} method 
- * @param {T} body 
+ * @param {M} method 
+ * @param {M extends 'POST'|'HEAD'|'PUT'?T:undefined} body 
  * @returns {U}
  */
-export async function JSONRequest(url, method, body) {
+export async function JSONRequest(url, method, body = ['POST', 'HEAD', 'PUT'].includes(method) ? {} : undefined) {
 	const result = await fetch(url, {
 		headers: {
 			'content-type': 'application/json',
 		},
 		method,
-		body: JSON.stringify(body),
+		...(body ? { body: JSON.stringify(body) } : {}),
 	});
 	if (!result.ok) {
 		return result.text()
-			.then(message => {
-				throw new Error(message);
-			})
 			.catch(() => {
 				throw new Error(`${result.status} ${result.statusText}`);
+			})
+			.then(message => {
+				throw new Error(message);
 			});
 	}
 	else {
@@ -81,3 +85,33 @@ const qwq = ensure({ type: 'string', pattern: /^[0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-
  * @param {unknown} value 
  */
 export const ensureUUID = value => qwq(value).toLowerCase();
+
+/**
+ * @template T
+ * @param {string} key
+ * @param {(oldValue:T)=>Promise<T>} getter
+ * @param {T} initial
+ * @param {{stringify:(value:T)=>string,parse:(text:string)=>T}}
+ */
+export function localStorageHelper(key, getter, initial, { stringify, parse } = JSON) {
+	const [box, set] = useStorage(localStorage, key);
+	let pendingPromise = null;
+	const box2 = map(optimizeEqual(box, (a, b) => a === b), v => v !== null ? parse(v) : initial);
+	return {
+		box: box2,
+		set: (/**@type {T}*/value) => {
+			set(stringify(value));
+		},
+		update: async () => {
+			if (pendingPromise) {
+				return pendingPromise;
+			}
+			else {
+				pendingPromise = getter(unbox(box2)).then(result => {
+					set(stringify(result));
+					pendingPromise = null;
+				});
+			}
+		},
+	};
+};

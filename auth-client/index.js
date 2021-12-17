@@ -1,47 +1,9 @@
+import { authState, registerOrLoginWithToken, logout, updateState } from '../api/auth.js';
 import { loading } from '../components/loading.js';
 import { useStorage } from '../components/storage.js';
-import { element as e } from '../dynamic-dom';
+import { element as e, template as t } from '../dynamic-dom';
 import { computed, map, useBox } from '../dynamic/dynamic.js';
 import { JSONRequest } from '../utils';
-
-/**@typedef {{isLoginned:true,uid:string}|{isLoginned:false}} AuthState*/
-
-const [box, set] = useStorage(localStorage, 'auth');
-
-/**
- * @type {import('../dynamic/dynamic.js').Box<AuthState>}
- */
-export const authState = map(box, value => {
-	try {
-		if (value === null) {
-			throw new Error('auth information not found');
-		}
-		return JSON.parse(value);
-	}
-	catch (e) {
-		return { loginned: false };
-	}
-});
-
-/**
- * @param {AuthState} state 
- */
-function setAuthState(state) {
-	set(JSON.stringify(state));
-}
-
-/**
- * @param {{uid:string,clientID:string}} param0 
- */
-async function login({ uid, clientID }) {
-	/**@type {{uid:string}}*/
-	const result = await JSONRequest('/api/auth/login', 'POST', { type: 'luogu-token', uid, clientID });
-	setAuthState({ isLoginned: true, uid: result.uid });
-}
-async function logout() {
-	await JSONRequest('/api/auth/logout', 'POST', { type: 'luogu-token' });
-	setAuthState({ isLoginned: false });
-}
 
 function loginPanel() {
 	const uid = e('input', {
@@ -64,8 +26,8 @@ function loginPanel() {
 		type: 'password',
 		style: 'width:30em;max-width:calc(100% - 8px);',
 		required: true,
-		validationMessage: 'qaq',
 		pattern: '^[0-9a-z]{40}$',
+		autocomplete: 'off',
 	});
 	clientId.addEventListener('input', () => {
 		if (clientId.validity.patternMismatch) {
@@ -81,6 +43,7 @@ function loginPanel() {
 		e('p', e('label', { for: 'uid' }, '_uid: '), uid),
 		e('p', e('label', { for: 'client-id' }, '__client_id: '), clientId),
 		e('p',
+			{ style: 'margin-block-end:0;' },
 			e('input', {
 				type: 'submit',
 				disabled: loginPending,
@@ -90,7 +53,7 @@ function loginPanel() {
 						setLoginPending(true);
 						set(
 							loading(
-								login({
+								registerOrLoginWithToken({
 									uid: uid.value,
 									clientID: clientId.value,
 								}).then(() => []).finally(() => setLoginPending(false)),
@@ -111,24 +74,38 @@ function loginPanel() {
 	return form;
 }
 
-export function authClient() {
+/**
+ * @param {import('../dynamic-dom/types.js').Supported} slot 
+ */
+export function authClient(slot = []) {
+	updateState().catch(() => { });
 	return computed($ => {
 		const state = $(authState);
 		if (state.isLoginned) {
 			const [hint, set] = useBox(/**@type {import('../dynamic-dom/types.js').Supported}*/([]));
 			const [logoutPending, setLogoutPending] = useBox(false);
-			return ['uid=', state.uid, map(logoutPending, v => !v ? e('button', {
-				$click: () => {
-					setLogoutPending(true);
-					set(
-						loading(
-							logout().then(() => []).finally(() => setLogoutPending(false)),
-							() => e('p', '登出中……'),
-							error => e('p', { style: 'color:red;' }, `登出失败：${error.message}`)
-						)
-					);
-				}
-			}, '登出') : []), hint];
+			return e('p',
+				e('details',
+					e('summary', '您好，', state.uid),
+					e('p',
+						e('button', {
+							disabled: logoutPending,
+							$click: () => {
+								setLogoutPending(true);
+								set(
+									loading(
+										logout().then(() => []).finally(() => setLogoutPending(false)),
+										() => e('span', '登出中……'),
+										error => e('span', { style: 'color:red;' }, `登出失败：${error.message}`)
+									)
+								);
+							}
+						}, '登出'),
+						hint,
+					),
+					slot,
+				),
+			);
 		}
 		else {
 			return loginPanel();

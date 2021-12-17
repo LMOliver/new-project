@@ -60,8 +60,8 @@ export class Sequence {
 
 /**
  * @template T
- * @param {T[]} current NO CLONE!
- * @param {import('../channel').Source<SequenceChange<T>>} changes UNSHARED!
+ * @param {T[]} current
+ * @param {import('../channel').Source<SequenceChange<T>>} changes
  */
 export function makeSequenceDirty(current, changes) {
 	return new Sequence(current.slice(), changes);

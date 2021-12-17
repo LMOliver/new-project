@@ -8,9 +8,7 @@ import { notfound } from './notfound/notfound.js';
 import { blog } from '../blog';
 import { prepandInHead } from '../router/middlewares.js';
 import { fufa } from './fufa/index.js';
-import { imagePreprocess } from '../image-preprocessing';
 import { drawClient } from '../drawer-client/index.js';
-
 
 export function main() {
 	const mainRouter =
@@ -18,11 +16,10 @@ export function main() {
 			Array.from(document.head.querySelectorAll(':not(.temporary)')),
 		)(
 			router([
-				['/', homepage],
-				['/blog', blog],
-				['/fufa/', fufa],
+				// ['/', homepage],
+				// ['/blog', blog],
+				// ['/fufa/', fufa],
 				['/draw', drawClient],
-				['/test', imagePreprocess],
 			])
 		);
 	const { head, body } = mainRouter({

@@ -3,10 +3,10 @@ body {
 	margin: 1em;
 	padding: 0;
 	min-height: calc(100vh - 2em);
-	font-family: Consolas, sans-serif;
+	font-family: Consolas, 'Courier New', sans-serif;
 }
 pre{
-	font-family: Consolas, sans-serif;
+	font-family: Consolas, 'Courier New', sans-serif;
 }
 code{
 	font-family: Consolas, 'Courier New', Courier, monospace;
@@ -86,4 +86,17 @@ textarea {
 
 label, summary {
 	cursor: pointer;
+}
+
+summary:not(:last-child) {
+	margin-bottom: 1em;
+}
+
+table{
+	border-collapse: collapse;
+}
+th, td {
+	padding: 0.5em;
+	border: 1px solid #bbbbbb;
+	text-align: center;
 }

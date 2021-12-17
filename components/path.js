@@ -3,8 +3,7 @@ import { useBox } from '../dynamic/dynamic';
 /**
  * @typedef {string} Path
  */
-const [path, setPath] =
-	useBox(/**@type {Path} */(window.location.pathname));
+const [path, setPath] = useBox(/**@type {Path} */(window.location.pathname));
 window.addEventListener('popstate', _event => {
 	setPath(window.location.pathname);
 });

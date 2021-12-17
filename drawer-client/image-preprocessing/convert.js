@@ -1,5 +1,5 @@
 import { buildPaletteSync, distance, image, utils } from 'image-q';
-import { element as e } from '../dynamic-dom/index.js';
+import { element as e } from '../../dynamic-dom/index.js';
 const COLORS = [
 	[0, 0, 0], [255, 255, 255], [170, 170, 170], [85, 85, 85],
 	[254, 211, 199], [255, 196, 206], [250, 172, 142], [255, 139, 131],
@@ -29,7 +29,8 @@ const palette = (() => {
 		right:number,
 	},
 	resize:{
-		scale:number,
+		width:number|null,
+		height:number|null,
 	},
 }} ConvertOptions
  */
@@ -38,15 +39,37 @@ const palette = (() => {
  * @param {ImageBitmap} bitmap
  * @param {ConvertOptions} options 
  */
-export async function convertImage(bitmap, { clip: { top, bottom, left, right }, resize: { scale } }) {
+export async function convertImage(bitmap, { clip: { top, bottom, left, right }, resize: { width, height } }) {
 	const sourceSize = {
 		width: bitmap.width - (left + right),
 		height: bitmap.height - (top + bottom),
 	};
-	const targetSize = {
-		width: Math.round(sourceSize.width * scale),
-		height: Math.round(sourceSize.height * scale),
-	};
+	if (sourceSize.width < 0) {
+		throw new Error('图像的宽度小于 0');
+	}
+	if (sourceSize.height < 0) {
+		throw new Error('图像的高度小于 0');
+	}
+	function fromScale(scale) {
+		return {
+			width: Math.round(sourceSize.width * scale),
+			height: Math.round(sourceSize.height * scale),
+		};
+	}
+	const targetSize =
+		width !== null
+			? height !== null
+				? { width, height }
+				: fromScale(width / sourceSize.width)
+			: height !== null
+				? fromScale(height / sourceSize.height)
+				: sourceSize;
+	if (targetSize.width <= 0 || targetSize.height <= 0) {
+		throw new Error('图像大小为 0');
+	}
+	if (targetSize.width >= 400 || targetSize.height >= 300) {
+		throw new Error(`图像大小过大（${targetSize.width}×${targetSize.height}）`);
+	}
 	const canvas = e('canvas', targetSize);
 	const ctx = canvas.getContext('2d');
 	if (!ctx) {
@@ -67,7 +90,6 @@ export async function convertImage(bitmap, { clip: { top, bottom, left, right },
 		}
 		const currentStep = performance.now();
 		if (currentStep - lastStep > 100) {
-			console.log(progress);
 			lastStep = currentStep;
 			await new Promise(r => setTimeout(r, 0));
 		}
