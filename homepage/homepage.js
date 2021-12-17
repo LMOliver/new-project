@@ -3,7 +3,7 @@ import { link } from '../components/link.js';
 import { hitokoto } from '../components/hitokoto.js';
 import { container } from '../components/container.css.js';
 // @ts-ignore
-import readMe from '../readme.md?raw';
+import readMe from '../README.md?raw';
 /**
  * @typedef {import('../dynamic-dom/types.js').Supported} Supported
  */
