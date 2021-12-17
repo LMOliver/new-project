@@ -21,13 +21,13 @@ function tokenPart() {
 		e('h3', 'Token'),
 		e('details',
 			e('summary', '我的 token'),
-			tokenList(myTokens, updateMyTokens),
+			tokenList('owner', myTokens, updateMyTokens),
 		),
 		e('details',
 			e('summary', '贡献给我的 token'),
-			tokenList(receivedTokens, updateReceivedTokens),
+			tokenList('receiver', receivedTokens, updateReceivedTokens),
 		),
-		tokenUploadForm(),
+		tokenUploadForm(authState),
 	);
 }
 

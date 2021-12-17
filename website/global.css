@@ -88,7 +88,7 @@ label, summary {
 	cursor: pointer;
 }
 
-summary:not(:last-child) {
+details[open] > summary:not(:last-child) {
 	margin-bottom: 1em;
 }
 

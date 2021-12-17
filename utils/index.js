@@ -76,7 +76,7 @@ export async function JSONRequest(url, method, body = ['POST', 'HEAD', 'PUT'].in
 			});
 	}
 	else {
-		return result.json();
+		return JSON.parse((await result.text()) || 'null');
 	}
 }
 

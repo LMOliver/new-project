@@ -1,47 +1,15 @@
 import { authState, registerOrLoginWithToken, logout, updateState } from '../api/auth.js';
 import { loading } from '../components/loading.js';
-import { useStorage } from '../components/storage.js';
 import { element as e, template as t } from '../dynamic-dom';
-import { computed, map, useBox } from '../dynamic/dynamic.js';
-import { JSONRequest } from '../utils';
+import { computed, map, unbox, useBox } from '../dynamic/dynamic.js';
+import { tokenInput } from './token-input.js';
 
 function loginPanel() {
-	const uid = e('input', {
-		id: 'uid',
-		type: 'text',
-		style: 'width:4em;',
-		required: true,
-		pattern: '^[1-9]\\d*$',
-	});
-	uid.addEventListener('input', () => {
-		if (uid.validity.patternMismatch) {
-			uid.setCustomValidity('_uid 应是数字');
-		}
-		else {
-			uid.setCustomValidity('');
-		}
-	});
-	const clientId = e('input', {
-		id: 'client-id',
-		type: 'password',
-		style: 'width:30em;max-width:calc(100% - 8px);',
-		required: true,
-		pattern: '^[0-9a-z]{40}$',
-		autocomplete: 'off',
-	});
-	clientId.addEventListener('input', () => {
-		if (clientId.validity.patternMismatch) {
-			clientId.setCustomValidity('__client_id 应是长度为 40 的十六进制串');
-		}
-		else {
-			clientId.setCustomValidity('');
-		}
-	});
+	const { element, value } = tokenInput();
 	const [hint, set] = useBox(/**@type {import('../dynamic-dom/types.js').Supported}*/([]));
 	const [loginPending, setLoginPending] = useBox(false);
 	const form = e('form',
-		e('p', e('label', { for: 'uid' }, '_uid: '), uid),
-		e('p', e('label', { for: 'client-id' }, '__client_id: '), clientId),
+		element,
 		e('p',
 			{ style: 'margin-block-end:0;' },
 			e('input', {
@@ -53,10 +21,7 @@ function loginPanel() {
 						setLoginPending(true);
 						set(
 							loading(
-								registerOrLoginWithToken({
-									uid: uid.value,
-									clientID: clientId.value,
-								}).then(() => []).finally(() => setLoginPending(false)),
+								registerOrLoginWithToken(unbox(value)).then(() => []).finally(() => setLoginPending(false)),
 								() => e('span', { style: 'margin-left:1em;' }, '提交中……'),
 								error => e('span', { style: 'color:red;margin-left:1em;' }, `提交失败：${error.message}`),
 							)

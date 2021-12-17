@@ -51,7 +51,7 @@ export function getReceivedTokens(state) {
 		return JSONRequest('/api/drawer/tokensForMe', 'GET');
 	}
 	else {
-		return Promise.reject('not loginned');
+		return Promise.reject('没有登录');
 	}
 }
 

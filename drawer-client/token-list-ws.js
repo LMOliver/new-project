@@ -1,4 +1,4 @@
-import { tokens } from '../api/tokens.js';
+import { getMyTokens } from '../api/tokens.js';
 import { empty } from '../channel/channel.js';
 import { useStorage } from '../components/storage.js';
 import { component } from '../dynamic-dom/component';
@@ -25,7 +25,7 @@ export const tokenList = component('drawer-token-list',
 			this.setMessage = messageHook[1];
 
 			this.serverHook = useBox(
-				/**@type {Sequence<import('../api/tokens.js').TokenWithStatus>|null}*/(null)
+				/**@type {Sequence<import('../api/tokens.js').TokenInfo>|null}*/(null)
 			);
 
 			const storageHook = useStorage(localStorage, 'token-list');
@@ -34,14 +34,14 @@ export const tokenList = component('drawer-token-list',
 					return [];
 				}
 				try {
-					return /** @type {import('../api/tokens.js').TokenWithStatus[]} */(JSON.parse(x));
+					return /** @type {import('../api/tokens.js').TokenInfo[]} */(JSON.parse(x));
 				}
 				catch (error) {
 					console.error(error);
 					return [];
 				}
 			});
-			this.setList = (/** @type {import('../api/tokens.js').TokenWithStatus[]} */ x) => storageHook[1](JSON.stringify(x));
+			this.setList = (/** @type {import('../api/tokens.js').TokenInfo[]} */ x) => storageHook[1](JSON.stringify(x));
 
 			const finalList = computed($ => {
 				return $(this.serverHook[0]) || new Sequence($(this.list), empty);
@@ -60,7 +60,7 @@ export const tokenList = component('drawer-token-list',
 					e('tbody',
 						map(finalList, x => map(x, x =>
 							e('tr',
-								e('td', x.uid),
+								e('td', x.owner),
 								e('td', {
 									style: `color:${{
 										unknown: 'black',
@@ -80,7 +80,7 @@ export const tokenList = component('drawer-token-list',
 		connect() {
 			console.log('connect called, connecting...');
 			this.state = CONNECTING;
-			tokens()
+			getMyTokens()
 				.then(([list, closePromise, close]) => {
 					console.log('opened!');
 					this.state = OPEN;
