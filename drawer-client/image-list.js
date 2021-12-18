@@ -139,7 +139,7 @@ export function imageList() {
 		})),
 		e('label', {
 			class: container,
-			style: 'display:inline-flex;justify-content:center;align-items:center;',
+			style: 'display:inline-flex;justify-content:center;align-items:center;box-shadow: 0px 0px 2px 1px gray;padding:0.5em',
 			$dragover: event => event.preventDefault(),
 			$dragenter: event => event.preventDefault(),
 			$drop: event => {
