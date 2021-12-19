@@ -1,13 +1,14 @@
 import { makeOnce, weakBind } from '../channel/channel.js';
 import { flat, makeBoxDirty, makeSequenceDirty, map, Sequence, SequenceChangeType, unbox, useSequenceDirty } from '../dynamic/dynamic.js';
 import { JSONRequest, localStorageHelper } from '../utils/index.js';
+import { apiPath } from './apiPath.js';
 import { authState } from './auth.js';
 
 /**
 @typedef {{
 	owner:string;
 	receiver:string;
-	status:'invalid'|'busy'|'working'|'unknown';
+	status:'invalid'|'busy'|'working'|'waiting';
 }} TokenInfo
 @typedef {
 	{type:'set',statuses:TokenInfo[]}
@@ -23,7 +24,7 @@ import { authState } from './auth.js';
  */
 export function getMyTokens(state) {
 	if (state.isLoginned) {
-		return JSONRequest('/api/drawer/myTokens', 'GET');
+		return JSONRequest(apiPath('/drawer/myTokens'), 'GET');
 	}
 	else {
 		return Promise.reject('没有登录');
@@ -48,7 +49,7 @@ export function updateMyTokens() {
  */
 export function getReceivedTokens(state) {
 	if (state.isLoginned) {
-		return JSONRequest('/api/drawer/tokensForMe', 'GET');
+		return JSONRequest(apiPath('/drawer/tokensForMe'), 'GET');
 	}
 	else {
 		return Promise.reject('没有登录');
@@ -153,10 +154,11 @@ export function isTokenEqual(a, b) {
 /**
  * @param {import('./api.js').PaintToken} token 
  * @param {string} receiver
- * @returns {Promise<void>}
+ * @returns {Promise<{isNewUser:boolean}>}
  */
 export async function uploadToken(token, receiver) {
-	await JSONRequest('/api/drawer/tokens', 'POST', { token, receiver });
+	const result = await JSONRequest(apiPath('/drawer/tokens'), 'POST', { token, receiver });
 	updateMyTokens();
 	updateReceivedTokens();
+	return result;
 }

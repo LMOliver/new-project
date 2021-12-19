@@ -1,5 +1,5 @@
 import { bindValue } from '../../components/bind.js';
-import { container } from '../../components/container.css.js';
+import { container, globalContainer } from '../../components/container.css.js';
 import { link } from '../../components/link.js';
 import { element as e, template as t } from '../../dynamic-dom/index.js';
 import { computed, useBox } from '../../dynamic/dynamic.js';
@@ -18,7 +18,7 @@ export function fufa() {
 			e('title', '胡话生成器'),
 		],
 		body: [
-			e('article', { class: container },
+			e('article', { class: globalContainer },
 				e('h2', t`${link('/', 'LMOliver')}/胡话生成器`),
 				e('p', '原作：Flamire'),
 				e('p', t`${e('a', { href: 'https://xyix.github.io/posts/?postname=moonshine-generator' }, '魔改')}：x义x、Flying2018`),

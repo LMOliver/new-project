@@ -5,5 +5,8 @@
 	"main": "index.js",
 	"type": "module",
 	"author": "LMOliver",
-	"license": "AGPL-3.0"
+	"license": "AGPL-3.0",
+	"dependencies": {
+		"image-q": "^3.0.4"
+	}
 }

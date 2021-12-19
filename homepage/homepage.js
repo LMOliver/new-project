@@ -4,6 +4,14 @@ import { hitokoto } from '../components/hitokoto.js';
 import { container } from '../components/container.css.js';
 // @ts-ignore
 import readMe from '../README.md?raw';
+// @ts-ignore
+import mdItLicense from '../blog/node_modules/markdown-it/LICENSE?raw';
+// @ts-ignore
+import katexLicense from '../blog/node_modules/katex/LICENSE?raw';
+// @ts-ignore
+import mdItKatexLicense from '../blog/node_modules/@iktakahiro/markdown-it-katex/LICENSE?raw';
+// @ts-ignore
+import imageQLicense from '../drawer-client/node_modules/image-q/LICENSE?raw';
 /**
  * @typedef {import('../dynamic-dom/types.js').Supported} Supported
  */
@@ -33,9 +41,13 @@ export function homepage({ path }) {
 				e('summary', '本站使用的库'),
 				e('ul',
 					e('li', e('a', { href: 'https://www.npmjs.com/package/markdown-it' }, 'markdown-it'), '，', 'MIT License'),
+					e('pre', mdItLicense),
 					e('li', e('a', { href: 'https://www.npmjs.com/package/katex' }, 'katex'), '，', 'MIT License'),
+					e('pre', katexLicense),
 					e('li', e('a', { href: 'https://www.npmjs.com/package/@iktakahiro/markdown-it-katex' }, '@iktakahiro/markdown-it-katex'), '，', 'MIT License'),
+					e('pre', mdItKatexLicense),
 					e('li', e('a', { href: 'https://www.npmjs.com/package/image-q' }, 'image-q'), '，', 'MIT License'),
+					e('pre', imageQLicense),
 				),
 			),
 			e('details',

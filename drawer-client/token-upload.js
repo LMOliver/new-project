@@ -28,7 +28,7 @@ function* findTokens(text) {
  * @param {import('../dynamic/dynamic.js').Box<import('../api/api.js').AuthState>} state 
  */
 function singleUploadForm(state) {
-	const { element, value } = tokenInput();
+	const { element, value } = tokenInput({ autoComplete: false });
 	const receiver = e('input', {
 		type: 'text',
 		style: 'width:4em;',
@@ -64,9 +64,11 @@ function singleUploadForm(state) {
 						set(
 							loading(
 								uploadToken(unbox(value), unbox(receiverBox))
-									.then(() => {
+									.then(({ isNewUser }) => {
 										form.reset();
-										return e('span', { style: 'color:green;margin-left:1em' }, '提交成功！');
+										return e('span', { style: 'color:green;margin-left:1em' },
+											isNewUser ? '提交成功！' : '更新成功！'
+										);
 									})
 									.finally(() => setIsPending(false)),
 								() => e('span', { style: 'margin-left:1em;' }, '提交中……'),
@@ -87,31 +89,33 @@ function singleUploadForm(state) {
  * @param {import('../dynamic/dynamic.js').Box<import('../api/api.js').AuthState>} state 
  */
 export function tokenUploadForm(state) {
-	const select = e('select',
-		e('option', { value: 'single', selected: true }, '上传单个 token'),
-		e('option', { value: 'multiple' }, '上传多个 token'),
-	);
-	const box = valueBox(select);
 	const singleUploader = singleUploadForm(state);
-	return e('form',
-		select,
-		computed($ => {
-			switch ($(box)) {
-				case 'single': {
-					return singleUploader;
-				}
-				case 'multiple': {
-					return e('em', 'TODO');
-				}
-				default: {
-					return [];
-				}
-			}
-		}),
-	);
+	return singleUploader;
+	// const select = e('select',
+	// 	e('option', { value: 'single', selected: true }, '上传单个 token'),
+	// 	e('option', { value: 'multiple' }, '上传多个 token'),
+	// );
+	// const box = valueBox(select);
+	// const singleUploader = singleUploadForm(state);
+	// return e('form',
+	// 	select,
+	// 	computed($ => {
+	// 		switch ($(box)) {
+	// 			case 'single': {
+	// 				return singleUploader;
+	// 			}
+	// 			case 'multiple': {
+	// 				return e('em', 'TODO');
+	// 			}
+	// 			default: {
+	// 				return [];
+	// 			}
+	// 		}
+	// 	}),
+	// );
 }
 
-export function tokenUploader() {
+function tokenUploader() {
 	const [list, change] = useSequence(/**@type {{name:string;text:string}[]}*/([]));
 	const tokensWithFileName = map(list, ({ name, text }) => ({ name, tokens: [...findTokens(text)] }));
 	const allTokens = flat(map(tokensWithFileName, x => makeSequenceDirty(x.tokens, empty)));

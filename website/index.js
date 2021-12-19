@@ -1,6 +1,6 @@
 import './global.css';
 import { path } from '../components/path.js';
-import { bindChildren, deepTransform, element as e } from '../dynamic-dom/index.js';
+import { bindChildren, deepTransform } from '../dynamic-dom/index.js';
 import { computed } from '../dynamic/computed.js';
 import { router } from '../router/index.js';
 import { homepage } from '../homepage/homepage.js';
@@ -16,9 +16,9 @@ export function main() {
 			Array.from(document.head.querySelectorAll(':not(.temporary)')),
 		)(
 			router([
-				// ['/', homepage],
-				// ['/blog', blog],
-				// ['/fufa/', fufa],
+				['/', homepage],
+				['/blog', blog],
+				['/fufa/', fufa],
 				['/draw', drawClient],
 			])
 		);

@@ -1,9 +1,8 @@
 import { element as e, valueBox } from '../dynamic-dom/index.js';
 import { computed } from '../dynamic/dynamic.js';
 
-export function tokenInput() {
+export function tokenInput({ autoComplete = true } = {}) {
 	const uid = e('input', {
-		id: 'uid',
 		type: 'text',
 		style: 'width:4em;',
 		required: true,
@@ -18,12 +17,11 @@ export function tokenInput() {
 		}
 	});
 	const clientID = e('input', {
-		id: 'client-id',
+		autocomplete: 'off',
 		type: 'password',
 		style: 'width:30em;max-width:calc(100% - 8px);',
 		required: true,
 		pattern: '^[0-9a-z]{40}$',
-		autocomplete: 'off',
 	});
 	clientID.addEventListener('input', () => {
 		if (clientID.validity.patternMismatch) {
@@ -37,8 +35,8 @@ export function tokenInput() {
 	const clientIDBox = valueBox(clientID);
 	return {
 		element: [
-			e('p', e('label', { for: 'uid' }, '_uid: '), uid),
-			e('p', e('label', { for: 'client-id' }, '__client_id: '), clientID),
+			e('p', e('label', '_uid: ', uid)),
+			e('p', e('label', '__client_id: ', clientID)),
 		],
 		value: computed($ => ({
 			uid: $(uidBox),

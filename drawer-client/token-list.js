@@ -1,7 +1,8 @@
 import { container } from '../components/container.css.js';
 import { loading } from '../components/loading.js';
-import { element as e } from '../dynamic-dom/index.js';
+import { element as e, template as t } from '../dynamic-dom/index.js';
 import { map, useBox } from '../dynamic/dynamic.js';
+import { showTokenStatus } from './showTokenStatus.js';
 import { showUID } from './showUID.js';
 
 /**
@@ -23,16 +24,7 @@ function showList(type, list) {
 			list.map(x =>
 				e('tr',
 					e('td', { style: 'padding:0;' }, showUID(type !== 'owner' ? x.owner : x.receiver)),
-					e('td', {
-						style: `color:${{
-							waiting: 'blue',
-							invalid: 'red',
-							busy: 'orange',
-							working: 'green',
-						}[x.status]};`
-					},
-						x.status,
-					)
+					e('td', showTokenStatus(x.status)),
 				),
 			)
 		)
@@ -62,13 +54,14 @@ export function tokenList(type, tokenInfoList, update) {
 	}
 	const [hint, setHint] = useBox(/**@type {import('../dynamic-dom/types.js').Supported}*/([]));
 	return [
-		map(tokenInfoList, list => showList(type, list)),
 		e('p',
+			t`${map(tokenInfoList, list => list.filter(x => x.status === 'working' || x.status === 'waiting').length)} 个有效 token`,
 			e('button', {
 				disabled: isLoading,
 				$click: () => setHint(fetchAndUpdate()),
 			}, '刷新'),
 			hint,
 		),
+		map(tokenInfoList, list => showList(type, list)),
 	];
 }

@@ -52,22 +52,20 @@ export function authClient(slot = []) {
 			return e('p',
 				e('details',
 					e('summary', '您好，', state.uid),
-					e('p',
-						e('button', {
-							disabled: logoutPending,
-							$click: () => {
-								setLogoutPending(true);
-								set(
-									loading(
-										logout().then(() => []).finally(() => setLogoutPending(false)),
-										() => e('span', '登出中……'),
-										error => e('span', { style: 'color:red;' }, `登出失败：${error.message}`)
-									)
-								);
-							}
-						}, '登出'),
-						hint,
-					),
+					e('button', {
+						disabled: logoutPending,
+						$click: () => {
+							setLogoutPending(true);
+							set(
+								loading(
+									logout().then(() => []).finally(() => setLogoutPending(false)),
+									() => e('span', '登出中……'),
+									error => e('span', { style: 'color:red;' }, `登出失败：${error.message}`)
+								)
+							);
+						}
+					}, '登出'),
+					hint,
 					slot,
 				),
 			);

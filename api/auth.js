@@ -4,6 +4,7 @@ import { useStorage } from '../components/storage.js';
 import { map } from '../dynamic/dynamic.js';
 import { optimizeEqual } from '../dynamic/utils.js';
 import { JSONRequest } from '../utils/index.js';
+import { apiPath } from './apiPath.js';
 
 const [box, set] = useStorage(localStorage, 'auth');
 
@@ -34,11 +35,11 @@ function setAuthState(state) {
  */
 export async function registerOrLoginWithToken(token) {
 	/**@type {{uid:string}}*/
-	const result = await JSONRequest('/api/auth/token', 'POST', { type: 'luogu-paint-token', token});
+	const result = await JSONRequest(apiPath('/auth/token'), 'POST', { type: 'luogu-paint-token', token, receiver: null });
 	setAuthState({ isLoginned: true, uid: result.uid });
 }
 export async function logout() {
-	await JSONRequest('/api/auth/logout', 'POST');
+	await JSONRequest(apiPath('/auth/logout'), 'POST');
 	setAuthState({ isLoginned: false });
 }
 /**
@@ -46,7 +47,7 @@ export async function logout() {
  */
 export async function fetchState() {
 	/**@type {{uid:string}|null} */
-	const result = await JSONRequest('/api/auth/state', 'GET');
+	const result = await JSONRequest(apiPath('/auth/state'), 'GET');
 	return result === null ? { isLoginned: false } : { isLoginned: true, uid: result.uid };
 }
 export async function updateState() {

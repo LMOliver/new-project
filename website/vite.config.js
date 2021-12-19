@@ -20,7 +20,7 @@ export default defineConfig({
 		charset: 'utf8',
 	},
 	server: {
-		port: 3000,
+		port: 2333,
 		fs: {
 			allow: ['../'],
 		},

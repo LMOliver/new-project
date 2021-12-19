@@ -10,7 +10,7 @@ function applyBoxChange(input, [, , value]) {
 }
 
 /**
- * @param {[import('../dynamic/dynamic.js').Box<string>,import('../channel/channel.js').Callback<string>]} hook
+ * @param {[import('../dynamic/dynamic.js').Box<string>,import('../channel/channel.js').Callback<string>]} boxAndSetter
  * @param {HTMLInputElement|HTMLTextAreaElement} input 
  */
 export function bind([box, set], input) {

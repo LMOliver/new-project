@@ -61,7 +61,7 @@ export function createImageElement(blob) {
 export async function JSONRequest(url, method, body = ['POST', 'HEAD', 'PUT'].includes(method) ? {} : undefined) {
 	const result = await fetch(url, {
 		headers: {
-			'content-type': 'application/json',
+			'Content-Type': 'application/json',
 		},
 		method,
 		...(body ? { body: JSON.stringify(body) } : {}),

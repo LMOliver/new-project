@@ -84,7 +84,7 @@ textarea {
 	display: block;
 }
 
-label, summary {
+label, summary, button {
 	cursor: pointer;
 }
 

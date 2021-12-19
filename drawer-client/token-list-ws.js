@@ -20,16 +20,16 @@ export const tokenList = component('drawer-token-list',
 			this.close = () => { };
 			this.wantToConnect = false;
 
-			const messageHook = useBox('');
-			this.message = messageHook[0];
-			this.setMessage = messageHook[1];
+			const messageBox = useBox('');
+			this.message = messageBox[0];
+			this.setMessage = messageBox[1];
 
-			this.serverHook = useBox(
+			this.serverBox = useBox(
 				/**@type {Sequence<import('../api/tokens.js').TokenInfo>|null}*/(null)
 			);
 
-			const storageHook = useStorage(localStorage, 'token-list');
-			this.list = map(storageHook[0], x => {
+			const storageBox = useStorage(localStorage, 'token-list');
+			this.list = map(storageBox[0], x => {
 				if (x === null) {
 					return [];
 				}
@@ -41,10 +41,10 @@ export const tokenList = component('drawer-token-list',
 					return [];
 				}
 			});
-			this.setList = (/** @type {import('../api/tokens.js').TokenInfo[]} */ x) => storageHook[1](JSON.stringify(x));
+			this.setList = (/** @type {import('../api/tokens.js').TokenInfo[]} */ x) => storageBox[1](JSON.stringify(x));
 
 			const finalList = computed($ => {
-				return $(this.serverHook[0]) || new Sequence($(this.list), empty);
+				return $(this.serverBox[0]) || new Sequence($(this.list), empty);
 			});
 
 			const shadow = this.attachShadow({ mode: 'open' });
@@ -88,11 +88,11 @@ export const tokenList = component('drawer-token-list',
 					closePromise.then(() => {
 						console.log('closed!');
 						this.state = CLOSED;
-						this.serverHook[1](null);
+						this.serverBox[1](null);
 						this.afterClosed();
 					});
 					if (this.wantToConnect) {
-						this.serverHook[1](list);
+						this.serverBox[1](list);
 						this.setList(list.current.slice());
 						wrap(list).changes(_ => {
 							this.setList(list.current.slice());
@@ -107,7 +107,7 @@ export const tokenList = component('drawer-token-list',
 				})
 				.catch(error => {
 					this.state = CLOSED;
-					this.serverHook[1](null);
+					this.serverBox[1](null);
 					console.log('error while connecting: %o', error);
 					this.setMessage(error.message || '无法连接');
 					this.afterClosed();

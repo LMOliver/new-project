@@ -1,2 +1,4 @@
 // @ts-ignore
-export { container } from './container.module.css';
+import { container, global, inlineContainer } from './container.module.css';
+export const globalContainer = container + ' ' + global;
+export { container, inlineContainer };

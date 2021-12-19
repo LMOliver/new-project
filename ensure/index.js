@@ -233,11 +233,11 @@ function _ensure(type) {
 export function ensure(type) {
 	const checker = _ensure(type);
 	return (value) => {
-		try {
-			return checker(value);
-		}
-		catch (error) {
-			throw Object.assign(error, { value, type });
-		}
+		// try {
+		return checker(value);
+		// }
+		// catch (error) {
+		// 	throw Object.assign(error, { value, type });
+		// }
 	};
 }
