@@ -1,13 +1,10 @@
-import { defineConfig } from 'vite';
-
-export default defineConfig({
+export default {
 	root: './',
 	assetsInclude: ['**/*.md'],
-	publicDir: './public',
 	build: {
 		target: 'esnext',
 		assetsInlineLimit: 1024,
-		outDir: './deploy/public',
+		outDir: './deploy',
 		minify: 'terser',
 		rollupOptions: {
 			output: {
@@ -25,4 +22,4 @@ export default defineConfig({
 			allow: ['../'],
 		},
 	},
-});
+};

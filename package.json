@@ -6,9 +6,8 @@
 		"vite": "^2.6.13"
 	},
 	"scripts": {
-		"dev": "(cd website && vite)",
-		"build": "(cd website && vite build)",
-		"deploy": "(cd website && ./deploy.sh)"
+		"dev": "vite",
+		"build": "vite build"
 	},
 	"license": "AGPL-3.0",
 	"dependencies": {
