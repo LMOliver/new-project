@@ -1,4 +1,4 @@
-import './node_modules/katex/dist/katex.min.css';
+import 'katex/dist/katex.min.css';
 import { router } from '../router/index.js';
 import { prepandInHead } from '../router/middlewares.js';
 import { articleRouter } from './article-router.js';

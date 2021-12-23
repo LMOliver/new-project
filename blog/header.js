@@ -4,12 +4,12 @@ import { hitokoto } from '../components/hitokoto.js';
 import { link } from '../components/link.js';
 import { element as e, template } from '../dynamic-dom/index.js';
 import { container } from '../components/container.css.js';
-const title = template`${link('/', 'LMOliver')}/${link('/blog', 'blog')}`;
+const title = template`${link('/', 'LMOliver')}/${link('/OI', 'OI')}`;
 const blogHeaderCommon1 = [
 	e('header', { class: container }, e('h1', title)),
 	e('nav', { class: container },
 		e('ul',
-			e('li', link('/blog/about', '关于')),
+			e('li', link('/OI/about', '关于')),
 		),
 	),
 ];
@@ -34,4 +34,4 @@ export function blogSidebars() {
 		),
 	];
 }
-export const blogTitle = e('title', '博客');
+export const blogTitle = e('title', 'OI');

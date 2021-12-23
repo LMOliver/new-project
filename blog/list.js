@@ -22,7 +22,7 @@ export function list(context) {
 						articles.map(({ id, title, time, description, tags }) =>
 							e('li',
 								e('p',
-									link(`./blog/${id}`, title),
+									link(`./OI/${id}`, title),
 									template`（${time.toLocaleDateString()}）`,
 									tags.map(getTag).map(({ showTag = true, name }) => showTag ? `[${name}]` : ''),
 								),

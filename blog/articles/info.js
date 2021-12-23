@@ -9,13 +9,13 @@
  */
 /**@type {Article[]} */
 export const articles = [
-	{
-		id: 'tale-of-Gei',
-		title: '给史瞎编',
-		description: '祝你们好运。',
-		time: new Date('2021-11-18 20:55'),
-		tags: ['tale', 'doujin'],
-	},
+	// {
+	// 	id: 'tale-of-Gei',
+	// 	title: '给史瞎编',
+	// 	description: '祝你们好运。',
+	// 	time: new Date('2021-11-18 20:55'),
+	// 	tags: ['tale', 'doujin'],
+	// },
 	{
 		id: 'LGR097',
 		title: '洛谷 11 月月赛 II & ✗✓OI Round 1 游记',

@@ -6,14 +6,29 @@
 		"vite": "^2.6.13"
 	},
 	"scripts": {
-		"dev": "(cd website && npm run dev)",
-		"preview": "(cd website && npm run preview)",
-		"build": "(cd website && npm run build)",
-		"deploy": "(cd website && npm run deploy)",
-		"start": "(cd server && npm start)"
+		"dev": "vite -c ./website/vite.config.js",
+		"build": "(cd website && vite build)",
+		"deploy": "(cd website && ./deploy.sh)"
 	},
 	"license": "AGPL-3.0",
 	"dependencies": {
-		"base64-arraybuffer": "^1.0.1"
-	}
+		"@iktakahiro/markdown-it-katex": "^4.0.1",
+		"base64-arraybuffer": "^1.0.1",
+		"image-q": "^3.0.4",
+		"katex": "^0.15.1",
+		"markdown-it": "^12.3.0"
+	},
+	"name": "new-project",
+	"description": "LMOliver's new project",
+	"version": "0.1.0",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/LMOliver/new-project.git"
+	},
+	"author": "LMOliver",
+	"bugs": {
+		"url": "https://github.com/LMOliver/new-project/issues"
+	},
+	"homepage": "https://github.com/LMOliver/new-project#readme"
 }

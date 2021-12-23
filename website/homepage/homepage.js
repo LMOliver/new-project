@@ -1,23 +1,23 @@
-import { element as e, template as t } from '../dynamic-dom';
-import { link } from '../components/link.js';
-import { hitokoto } from '../components/hitokoto.js';
-import { container } from '../components/container.css.js';
+import { element as e, template as t } from '../../dynamic-dom';
+import { link } from '../../components/link.js';
+import { hitokoto } from '../../components/hitokoto.js';
+import { container } from '../../components/container.css.js';
 // @ts-ignore
-import readMe from '../README.md?raw';
+import copying from '../../COPYING?raw';
 // @ts-ignore
-import mdItLicense from '../blog/node_modules/markdown-it/LICENSE?raw';
+import mdItLicense from 'markdown-it/LICENSE?raw';
 // @ts-ignore
-import katexLicense from '../blog/node_modules/katex/LICENSE?raw';
+import katexLicense from 'katex/LICENSE?raw';
 // @ts-ignore
-import mdItKatexLicense from '../blog/node_modules/@iktakahiro/markdown-it-katex/LICENSE?raw';
+import mdItKatexLicense from '@iktakahiro/markdown-it-katex/LICENSE?raw';
 // @ts-ignore
-import imageQLicense from '../drawer-client/node_modules/image-q/LICENSE?raw';
+import imageQLicense from '../../node_modules/image-q/LICENSE?raw';
 /**
- * @typedef {import('../dynamic-dom/types.js').Supported} Supported
+ * @typedef {import('../../dynamic-dom/types.js').Supported} Supported
  */
 
 /**
- * @type {import('../router/index.js').Handler}
+ * @type {import('../../router/index.js').Handler}
  */
 export function homepage({ path }) {
 	const startTime = new Date(2021, 11 - 1, 8).getTime();
@@ -28,9 +28,9 @@ export function homepage({ path }) {
 		body: [
 			e('h1', 'LMOliver'),
 			e('ul',
-				e('li', link('./blog', '博客')),
+				e('li', link('./OI', 'OI 碎片')),
 				e('li', link('./fufa', '胡话生成器')),
-				e('li', link('./draw', '绘板')),
+				// e('li', link('./draw', '绘板')),
 				// e('li', link('./mosiyuan', t`膜拜 ${blackRed('Siyuan')}`)),
 			),
 			e('p', `这个网站的第一行代码是 LMOliver 于 ${Math.floor((Date.now() - startTime) / 86400 / 1000)} 天前写下的。`),
@@ -52,7 +52,7 @@ export function homepage({ path }) {
 			),
 			e('details',
 				e('summary', '版权声明'),
-				e('pre', readMe)
+				e('pre', copying)
 			),
 			e('a', { href: 'https://github.com/LMOliver/new-project' }, '本站源代码'),
 		],
