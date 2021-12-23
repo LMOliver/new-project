@@ -1,4 +1,3 @@
-import { ensure } from '../ensure';
 import { useStorage } from '../components/storage.js';
 import { map, unbox } from '../dynamic';
 import { optimizeEqual } from '../dynamic/utils.js';
@@ -35,7 +34,6 @@ export function isLocal(href) {
 }
 
 const registry = new FinalizationRegistry(url => {
-	console.log('Bye', url);
 	URL.revokeObjectURL(url);
 });
 /**
@@ -79,12 +77,6 @@ export async function JSONRequest(url, method, body = ['POST', 'HEAD', 'PUT'].in
 		return JSON.parse((await result.text()) || 'null');
 	}
 }
-
-const qwq = ensure({ type: 'string', pattern: /^[0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12}$/i });
-/**
- * @param {unknown} value 
- */
-export const ensureUUID = value => qwq(value).toLowerCase();
 
 /**
  * @template T

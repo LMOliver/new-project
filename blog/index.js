@@ -3,7 +3,6 @@ import { router } from '../router/index.js';
 import { prepandInHead } from '../router/middlewares.js';
 import { articleRouter } from './article-router.js';
 import { list } from './list.js';
-import { element as e } from '../dynamic-dom/index.js';
 
 /**
  * @type {import('../router/index.js').Handler}

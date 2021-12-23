@@ -6,7 +6,7 @@
 		"vite": "^2.6.13"
 	},
 	"scripts": {
-		"dev": "vite -c ./website/vite.config.js",
+		"dev": "(cd website && vite)",
 		"build": "(cd website && vite build)",
 		"deploy": "(cd website && ./deploy.sh)"
 	},
