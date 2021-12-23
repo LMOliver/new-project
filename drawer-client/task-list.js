@@ -54,6 +54,9 @@ function showTask(task) {
  * @param {(import("../api/api.js").Task&{id:string})[]} list
  */
 function showList(list) {
+	if (list.length === 0) {
+		return e('div', { class: container, style: 'width:fit-content;' }, '没有任务');
+	}
 	return e('ul', { style: 'list-style-type:none;padding-left:0;' },
 		list.map(task => e('li', { style: 'margin-block:1em;' }, showTask(task))),
 	);

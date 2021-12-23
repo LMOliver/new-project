@@ -30,7 +30,7 @@ export function taskUploader() {
 			}
 			else {
 				return [
-					fileUploader('新增任务', { accept: 'image/*' }, async file => {
+					fileUploader('点我上传图片', { accept: 'image/*' }, async file => {
 						const bitmap = await createImageBitmap(file);
 						const { width, height } = bitmap;
 						if (width >= WIDTH || height >= HEIGHT) {
@@ -51,7 +51,9 @@ export function taskUploader() {
 							// console.log(taskImage);
 						}
 					}),
-					e('p', t`建议您新增任务前先使用画图或 ${e('a', { href: 'https://www.gimp.org/' }, 'GIMP')} 等程序对图像进行预处理。`),
+					e('p', { style: 'margin-bottom:0;' },
+						t`建议您新增任务前先使用画图或 ${e('a', { href: 'https://www.gimp.org/' }, 'GIMP')} 等程序对图像进行预处理。`
+					),
 				];
 			}
 		}),

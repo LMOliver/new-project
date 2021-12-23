@@ -12,5 +12,8 @@
 		"deploy": "(cd website && npm run deploy)",
 		"start": "(cd server && npm start)"
 	},
-	"license": "AGPL-3.0"
+	"license": "AGPL-3.0",
+	"dependencies": {
+		"base64-arraybuffer": "^1.0.1"
+	}
 }

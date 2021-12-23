@@ -67,7 +67,7 @@ export function taskEditor(image, task, done) {
 		e('p', e('label', '横坐标', left)),
 		e('p', e('label', '纵坐标', top)),
 		e('p', e('label', '优先级', priorityInput), ' ', e('label', '权重', weightInput)),
-		e('p',
+		e('p', { style: 'margin-bottom:0;' },
 			e('input', {
 				type: 'submit',
 				$click: event => {
@@ -94,6 +94,7 @@ export function taskEditor(image, task, done) {
 		element: [
 			e('div', { style: 'position:relative;' },
 				boardDisplayer(),
+				e('p',`宽 ${image.width} 像素，高 ${image.height} 像素，面积 ${image.width*image.height} 像素`),
 				e('div', {
 					class: previewImage,
 					style: computed($ => `position:absolute;left:${$(lB)}px;top:${$(tB)}px;`),

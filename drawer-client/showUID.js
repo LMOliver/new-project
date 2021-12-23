@@ -47,7 +47,7 @@ export function showSmallUID(uid) {
 	if (site === 'Luogu' && /^[1-9]\d*$/.test(id)) {
 		return [
 			e('a', { href: `https://www.luogu.com.cn/user/${id}`, style: 'display:inline-block;height:1em;' },
-				showSmallUidImage(uid),
+				// showSmallUidImage(uid),
 				id,
 			),
 		];

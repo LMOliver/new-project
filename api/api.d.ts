@@ -3,11 +3,9 @@ export type AuthState = {
 } | {
 	isLoginned: true;
 	uid: string;
+	name: string;
 };
-export type PaintToken = {
-	uid: string;
-	clientID: string;
-};
+export type PaintToken = string;
 export type TaskImage = {
 	height: number;
 	width: number;

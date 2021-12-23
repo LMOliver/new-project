@@ -3,40 +3,55 @@ import { loading } from '../components/loading.js';
 import { element as e, template as t } from '../dynamic-dom/index.js';
 import { map, useBox } from '../dynamic/dynamic.js';
 import { showTokenStatus } from './showTokenStatus.js';
-import { showUID } from './showUID.js';
+import { showSmallUID } from './showUID.js';
 
 /**
- * @param {'owner'|'receiver'} type
  * @param {import('../api/tokens.js').TokenInfo[]} list 
+ * @param {number} startIndex
  */
-function showList(type, list) {
-	if (list.length === 0) {
-		return e('div', { class: container, style: 'width:fit-content;' }, '没有 token');
-	}
-	return e('table', { class: container },
+function showListPart(list, startIndex) {
+	return e('table', { class: container, style: 'height:fit-content;' },
 		e('thead',
 			e('tr',
-				e('th', { style: 'padding:0;' }, type !== 'owner' ? '用户' : '贡献给'),
+				e('th', '#'),
 				e('th', { style: 'width:4em;' }, '状态'),
+				e('th', { style: 'width:4em;' }, 'uid'),
 			),
 		),
 		e('tbody',
-			list.map(x =>
+			list.map((x, id) =>
 				e('tr',
-					e('td', { style: 'padding:0;' }, showUID(type !== 'owner' ? x.owner : x.receiver)),
+					e('td', startIndex + id),
+					// e('td', { style: 'padding:0;' }, showUID(type !== 'owner' ? x.owner : x.receiver)),
 					e('td', showTokenStatus(x.status)),
+					e('td', x.remark ? showSmallUID(x.remark) : []),
 				),
 			)
 		)
 	);
 }
 
+const TOKENS_PER_PART = 10;
 /**
- * @param {'owner'|'receiver'} type
- * @param {typeof import("../api/tokens.js").myTokens} tokenInfoList
- * @param {typeof import("../api/tokens.js").updateMyTokens} update
+ * @param {import('../api/tokens.js').TokenInfo[]} list 
  */
-export function tokenList(type, tokenInfoList, update) {
+function showList(list) {
+	if (list.length === 0) {
+		return e('div', { class: container, style: 'width:fit-content;' }, '没有 token');
+	}
+	return e('div', { style: 'display:flex;gap:0.5em;' },
+		Array.from(
+			{ length: Math.ceil(list.length / TOKENS_PER_PART) },
+			(_, i) => list.slice(i * TOKENS_PER_PART, (i + 1) * TOKENS_PER_PART)
+		).map((part, i) => showListPart(part, i * 10 + 1))
+	);
+}
+
+/**
+ * @param {typeof import("../api/tokens.js").receivedTokens} tokenInfoList
+ * @param {typeof import("../api/tokens.js").updateReceivedTokens} update
+ */
+export function tokenList(tokenInfoList, update) {
 	const [isLoading, set] = useBox(false);
 	function fetchAndUpdate() {
 		set(true);
@@ -62,6 +77,6 @@ export function tokenList(type, tokenInfoList, update) {
 			}, '刷新'),
 			hint,
 		),
-		map(tokenInfoList, list => showList(type, list)),
+		map(tokenInfoList, list => showList(list)),
 	];
 }

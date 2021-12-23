@@ -46,5 +46,5 @@ export async function quantize(imageData) {
 			await new Promise(r => setTimeout(r, 0));
 		}
 	}
-	throw new Error('QAQ');
+	throw new Error('impossible');
 }

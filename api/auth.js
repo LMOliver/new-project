@@ -1,5 +1,3 @@
-/**@typedef {{isLoginned:true,uid:string}|{isLoginned:false}} */
-
 import { useStorage } from '../components/storage.js';
 import { map } from '../dynamic/dynamic.js';
 import { optimizeEqual } from '../dynamic/utils.js';
@@ -31,24 +29,25 @@ function setAuthState(state) {
 }
 
 /**
- * @param {import('./api.js').PaintToken} token
+ * @param {string} uid
+ * @param {string} secret
  */
-export async function registerOrLoginWithToken(token) {
-	/**@type {{uid:string}}*/
-	const result = await JSONRequest(apiPath('/auth/token'), 'POST', { type: 'luogu-paint-token', token, receiver: null });
-	setAuthState({ isLoginned: true, uid: result.uid });
+export async function registerOrLoginWithLuogu(uid, secret) {
+	/**@type {{uid:string,name:string}}*/
+	const result = await JSONRequest(apiPath('/drawer/auth'), 'POST', { type: 'Luogu', uid, secret });
+	setAuthState({ isLoginned: true, uid: result.uid, name: result.name });
 }
 export async function logout() {
-	await JSONRequest(apiPath('/auth/logout'), 'POST');
+	/* no await */JSONRequest(apiPath('/drawer/auth'), 'DELETE');
 	setAuthState({ isLoginned: false });
 }
 /**
  * @returns {Promise<import('./api.js').AuthState>}
  */
 export async function fetchState() {
-	/**@type {{uid:string}|null} */
-	const result = await JSONRequest(apiPath('/auth/state'), 'GET');
-	return result === null ? { isLoginned: false } : { isLoginned: true, uid: result.uid };
+	/**@type {{uid:string,name:string}|null} */
+	const result = await JSONRequest(apiPath('/drawer/auth'), 'GET');
+	return result === null ? { isLoginned: false } : { isLoginned: true, uid: result.uid, name: result.name };
 }
 export async function updateState() {
 	setAuthState(await fetchState());

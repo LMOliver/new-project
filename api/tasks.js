@@ -26,6 +26,14 @@ export function updateTask({ id, options }) {
 	return JSONRequest(apiPath(`/drawer/task/${id}`), 'POST', { options });
 }
 
+/**
+ * @param {string} id 
+ * @returns {Promise<void>}
+ */
+export function deleteTasks(id) {
+	return JSONRequest(apiPath(`/drawer/task/${id}`), 'DELETE');
+}
+
 const createTasksHelper = (/** @type {import("./api.js").AuthState} */ state) => {
 	const getter = (/** @type {import('./api.js').Task[]} */ _) => getTasks(state);
 	const helper = localStorageHelper('tasks', getter, []);
