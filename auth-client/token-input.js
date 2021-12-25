@@ -36,6 +36,7 @@ export function tokenSubmitEntryInput() {
 	const uidBox = valueBox(uid);
 	return {
 		element: [
+			e('p', e('a', { href: 'https://www.luogu.com.cn/paintboard' }, '洛谷冬日绘板主页')),
 			e('p', e('label', 'token: ', token)),
 			e('p', e('label', 'uid: ', uid)),
 		],

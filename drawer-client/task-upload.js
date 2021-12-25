@@ -9,7 +9,7 @@ import { taskEditor } from './taskEditor.js';
 export const limitInRange = (/** @type {number} */ x, /** @type {number} */ l, /** @type {number} */ r) => Math.max(Math.min(x, r), l);
 
 export function taskUploader() {
-	const [editingTaskImage, set] = useBox(/**@type {import('../api/api.js').TaskImage|null}*/(null));
+	const [editingTaskImage, set] = useBox(/**@type {import('../api-client/api.js').TaskImage|null}*/(null));
 	const [hint, setHint] = useBox(/**@type {import('../dynamic-dom/types.js').Supported}*/([]));
 	return [
 		hint,
@@ -19,7 +19,7 @@ export function taskUploader() {
 				const { element, focus } = taskEditor(image, null, (/** @type {any} */ isSubmitted) => {
 					set(null);
 					if (isSubmitted) {
-						setHint(e('p', '提交成功！'));
+						setHint(e('p', { style: 'color:green;' }, '提交成功！'));
 					}
 					else {
 						setHint([]);

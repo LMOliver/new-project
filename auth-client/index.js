@@ -1,4 +1,4 @@
-import { authState, registerOrLoginWithLuogu, logout, updateState } from '../api/auth.js';
+import { authState, registerOrLoginWithLuogu, logout, updateState } from '../api-client/auth.js';
 import { loading } from '../components/loading.js';
 import { element as e, template as t, valueBox } from '../dynamic-dom';
 import { computed, useBox } from '../dynamic/dynamic.js';

@@ -5,6 +5,7 @@ import { container } from './container.css.js';
  * @param {import('../dynamic-dom/types.js').Supported} slot
  * @param {import('../channel/channel.js').Callback<File>} callback
  * @param {import("../dynamic-dom/types.js").Attri<string>} inputAttr
+ * @returns {import('../dynamic-dom/types.js').Supported}
  */
 export function fileUploader(slot, inputAttr, callback) {
 	const fileInput = e('input', {

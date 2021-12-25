@@ -8,7 +8,7 @@ import { notfound } from './notfound/notfound.js';
 import { blog } from '../blog';
 import { prepandInHead } from '../router/middlewares.js';
 import { fufa } from './fufa/index.js';
-// import { drawClient } from '../drawer-client/index.js';
+import { drawClient } from '../drawer-client/index.js';
 
 export function main() {
 	const mainRouter =
@@ -19,7 +19,7 @@ export function main() {
 				['/', homepage],
 				['/blog', blog],
 				['/fufa/', fufa],
-				// ['/draw', drawClient],
+				['/drawer', drawClient],
 			])
 		);
 	const { head, body } = mainRouter({

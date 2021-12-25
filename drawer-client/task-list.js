@@ -1,4 +1,4 @@
-import { tasks } from '../api/tasks.js';
+import { tasks } from '../api-client/tasks.js';
 import { container, inlineContainer } from '../components/container.css.js';
 import { element as e } from '../dynamic-dom/index.js';
 import { computed, useBox } from '../dynamic/dynamic.js';
@@ -17,7 +17,7 @@ function parseTaskWeight(weight) {
 }
 
 /**
- * @param {import('../api/api.js').Task&{id:string}} task 
+ * @param {import('../api-client/api.js').Task&{id:string}} task 
  * @returns {import('../dynamic-dom/types.js').Supported}
  */
 function showTask(task) {
@@ -51,7 +51,7 @@ function showTask(task) {
 }
 
 /**
- * @param {(import("../api/api.js").Task&{id:string})[]} list
+ * @param {(import("../api-client/api.js").Task&{id:string})[]} list
  */
 function showList(list) {
 	if (list.length === 0) {

@@ -25,7 +25,6 @@ export function getReceivedTokens(state) {
 const createReceivedTokens = (/** @type {import("./api.js").AuthState} */ state) => {
 	const getter = (/** @type {TokenInfo[]} */ _) => getReceivedTokens(state);
 	const helper = localStorageHelper('received-tokens', getter, []);
-	helper.update();
 	return helper;
 };
 const qwqReceivedTokens = map(authState, createReceivedTokens);

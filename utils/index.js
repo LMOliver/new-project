@@ -99,10 +99,13 @@ export function localStorageHelper(key, getter, initial, { stringify, parse } = 
 				return pendingPromise;
 			}
 			else {
-				pendingPromise = getter(unbox(box2)).then(result => {
-					set(stringify(result));
-					pendingPromise = null;
-				});
+				pendingPromise = getter(unbox(box2))
+					.then(result => {
+						set(stringify(result));
+					})
+					.finally(() => {
+						pendingPromise = null;
+					});
 			}
 		},
 	};

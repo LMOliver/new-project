@@ -1,4 +1,5 @@
-import { addTask, updateTask, updateTasks } from '../api/tasks.js';
+import { addTask, deleteTask, updateTask, updateTasks } from '../api-client/tasks.js';
+import { confirmButton } from '../components/confirmButton.js';
 import { loading } from '../components/loading.js';
 import { element as e, valueBox } from '../dynamic-dom/index.js';
 import { computed, map, unbox, useBox } from '../dynamic/dynamic.js';
@@ -10,8 +11,8 @@ import { limitInRange } from './task-upload';
 import { previewImage } from './taskEditorImagePreview.module.css';
 
 /**
- * @param {import('../api/api.js').TaskImage} image
- * @param {(import('../api/api.js').Task&{id:string})|null} task
+ * @param {import('../api-client/api.js').TaskImage} image
+ * @param {(import('../api-client/api.js').Task&{id:string})|null} task
  * @param {import('../channel/channel.js').Callback<boolean>} done
  */
 export function taskEditor(image, task, done) {
@@ -87,6 +88,20 @@ export function taskEditor(image, task, done) {
 				value: '提交',
 			}),
 			e('button', { $click: () => done(false) }, '取消'),
+			task
+				? confirmButton('删除', () => {
+					setHint(loading(
+						deleteTask(task.id)
+							.then(()=>{
+								updateTasks();
+								done(true);
+								return [];
+							}),
+							() => '删除中……',
+							error => e('span', { style: 'color:red;' }, error.message || error.toString())
+					))
+				})
+				: [],
 			hint
 		)
 	);
@@ -94,7 +109,7 @@ export function taskEditor(image, task, done) {
 		element: [
 			e('div', { style: 'position:relative;' },
 				boardDisplayer(),
-				e('p',`宽 ${image.width} 像素，高 ${image.height} 像素，面积 ${image.width*image.height} 像素`),
+				e('p', `宽 ${image.width} 像素，高 ${image.height} 像素，面积 ${image.width * image.height} 像素`),
 				e('div', {
 					class: previewImage,
 					style: computed($ => `position:absolute;left:${$(lB)}px;top:${$(tB)}px;`),

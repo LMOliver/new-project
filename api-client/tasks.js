@@ -30,7 +30,7 @@ export function updateTask({ id, options }) {
  * @param {string} id 
  * @returns {Promise<void>}
  */
-export function deleteTasks(id) {
+export function deleteTask(id) {
 	return JSONRequest(apiPath(`/drawer/task/${id}`), 'DELETE');
 }
 

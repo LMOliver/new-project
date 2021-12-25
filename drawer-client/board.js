@@ -1,4 +1,4 @@
-import { board } from '../api/board.js';
+import { board } from '../api-client/board.js';
 import { loading } from '../components/loading.js';
 import { element as e } from '../dynamic-dom/index.js';
 import { useBox } from '../dynamic/dynamic.js';

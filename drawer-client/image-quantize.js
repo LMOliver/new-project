@@ -21,7 +21,7 @@ function createReverseTable() {
 
 /**
  * @param {ImageData} imageData 
- * @returns {Promise<import('../api/api.js').TaskImage>}
+ * @returns {Promise<import('../api-client/api.js').TaskImage>}
  */
 export async function quantize(imageData) {
 	const table = createReverseTable();

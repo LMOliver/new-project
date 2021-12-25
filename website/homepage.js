@@ -30,7 +30,7 @@ export function homepage({ path }) {
 			e('ul',
 				e('li', link('./blog', 'OI 碎片')),
 				e('li', link('./fufa', '胡话生成器')),
-				// e('li', link('./draw', '绘板')),
+				e('li', link('./drawer', '绘板')),
 				// e('li', link('./mosiyuan', t`膜拜 ${blackRed('Siyuan')}`)),
 			),
 			e('p', `这个网站的第一行代码是 LMOliver 于 ${Math.floor((Date.now() - startTime) / 86400 / 1000)} 天前写下的。`),

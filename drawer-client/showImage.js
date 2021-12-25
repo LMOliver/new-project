@@ -18,7 +18,7 @@ function createTable() {
 }
 
 /**
- * @param {import('../api/api.js').TaskImage} param0
+ * @param {import('../api-client/api.js').TaskImage} param0
  */
 export function showImage({ width, height, data }) {
 	const canvas = e('canvas', { width, height, style: 'image-rendering:pixelated;' });
