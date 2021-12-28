@@ -30,18 +30,25 @@ function decode({ width, height, data }) {
 
 /**
 @type {Promise<{
-    width: number;
-    height: number;
-    data: Uint8Array;
+	width: number;
+	height: number;
+	data: Uint8Array;
 }>|null}
  */
 let boardCache = null;
 function qaq() {
 	if (boardCache === null) {
-		boardCache = board().catch(error => {
-			boardCache = null;
-			throw error;
-		});
+		boardCache = board()
+			.then(board => {
+				setTimeout(() => {
+					boardCache = null;
+				}, 30 * 1000);
+				return board;
+			})
+			.catch(error => {
+				boardCache = null;
+				throw error;
+			});
 	}
 	return boardCache;
 }

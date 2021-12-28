@@ -1,9 +1,9 @@
 import { uploadToken } from '../api-client/tokens.js';
-import { tokenSubmitEntryInput } from '../auth-client/token-input.js';
+import { tokenSubmitEntryInput } from './token-input.js';
 import { fileUploader } from '../components/file-uploader.js';
 import { loading } from '../components/loading.js';
-import { element as e, valueBox } from '../dynamic-dom/index.js';
-import { map, unbox, useBox } from '../dynamic/dynamic.js';
+import { element as e, template, valueBox } from '../dynamic-dom/index.js';
+import { map, SequenceChangeType, unbox, useBox, useSequence } from '../dynamic/dynamic.js';
 
 /**
  * @param {any} uid
@@ -12,7 +12,7 @@ function singleUploadForm(uid) {
 	const { element, value } = tokenSubmitEntryInput();
 	const [hint, set] = useBox(/**@type {import('../dynamic-dom/types.js').Supported}*/([]));
 	const [isPending, setIsPending] = useBox(false);
-	const form = e('form',
+	const form = e('form', { style: 'margin-top:0;' },
 		element,
 		e('p',
 			{ style: 'margin-block-end:0;' },
@@ -30,7 +30,7 @@ function singleUploadForm(uid) {
 										form.reset();
 										return isNewToken
 											? e('span', { style: 'color:green;margin-left:1em' },
-												'提交成功！'
+												'提交成功，感谢您的贡献！'
 											)
 											: e('span', { style: 'color:orange;margin-left:1em' },
 												'该 token 已提交过'
@@ -68,12 +68,21 @@ function findEntries(text) {
 function multiUploadingProcess(uid, entries) {
 	// console.log(uid, entries);
 	const [progress, set] = useBox(0);
+	const [errors, changeErrors] = useSequence(/**@type {[import('../api-client/api.js').PaintToken,string|null,string][]}*/([]));
 	return {
-		element: e('progress', {
-			min: 0,
-			max: entries.length,
-			value: progress,
-		}),
+		element: [
+			e('progress', {
+				min: 0,
+				max: entries.length,
+				value: progress,
+			}),
+			e('span', template`${progress}/${entries.length}`),
+			e('ul', map(errors, ([token, remark, message]) =>
+				e('li',
+					`token=……${token.slice(-6)} ${remark ? `uid=${remark}` : '无 uid'} ${message}`
+				)
+			)),
+		],
 		promise: (async () => {
 			let cnt = 0;
 			for (const qwq of entries) {
@@ -86,6 +95,12 @@ function multiUploadingProcess(uid, entries) {
 						// console.error(error);
 						if (tries + 1 < 4) {
 							await new Promise(resolve => setTimeout(resolve, 2 ** tries * 1000));
+						}
+						else {
+							changeErrors([
+								SequenceChangeType.insert, errors.current.length,
+								[qwq.token, qwq.remark, error.message || error.toString()]
+							]);
 						}
 					}
 				}
@@ -115,11 +130,11 @@ function multiUploadForm(uid) {
 }
 
 /**
- * @param {string} uid
+ * @param {string} receiver
  */
-export function tokenUploadForm(uid) {
-	const single = singleUploadForm(uid);
-	const multi = multiUploadForm(uid);
+export function tokenUploadForm(receiver) {
+	const single = singleUploadForm(receiver);
+	const multi = multiUploadForm(receiver);
 	const select = e('select',
 		e('option', { value: 'single', selected: true }, '提交单个 token'),
 		e('option', { value: 'multi' }, '上传文件'),
@@ -128,11 +143,4 @@ export function tokenUploadForm(uid) {
 		select,
 		map(valueBox(select), s => s === 'single' ? single : multi),
 	];
-}
-
-/**
- * @param {import('../dynamic/dynamic.js').Box<import('../api-client/api.js').AuthState>} state 
- */
-export function tokenSelfUploadForm(state) {
-	return map(state, s => s.isLoginned ? tokenUploadForm(s.uid) : []);
 }

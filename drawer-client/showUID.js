@@ -3,17 +3,19 @@ import { element as e } from '../dynamic-dom/index.js';
 /**
  * @param {string} uid
  * @returns {import('../dynamic-dom/types.js').Supported}
+ * @param {import("../dynamic-dom/types.js").Supported} name
  */
-export function showUID(uid) {
+export function showUID(uid, name) {
 	const [id, site] = uid.split('@');
 	if (site === 'Luogu' && /^[1-9]\d*$/.test(id)) {
-		return e('a', { href: `https://www.luogu.com.cn/user/${id}`, style: 'display:block;height:3em;' },
+		return e('a', { href: `https://www.luogu.com.cn/user/${id}` },
 			e('img', {
 				src: `https://cdn.luogu.com.cn/upload/usericon/${id}.png`,
-				style: 'height:3em;width:3em;',
+				style: 'height:1em;width:1em;vertical-align:middle;position:relative;bottom:0.1em;',
 				title: `uid=${id}`,
 				alt: id,
 			}),
+			name,
 		);
 	}
 	else {

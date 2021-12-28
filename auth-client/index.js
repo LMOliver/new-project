@@ -70,7 +70,11 @@ function loginPanel() {
 								hint,
 							];
 
-							const a1 = e('a', { href: `https://www.luogu.com.cn/user/${uidValue}` }, '您的个人主页');
+							const a1 = e('a', {
+								href: `https://www.luogu.com.cn/user/${uidValue}`,
+								target: '_blank',
+								rel: 'noopener',
+							}, '您的个人主页');
 							const a2 = e('code', copyableText(pair.slogan));
 							return [
 								e('p', t`请前往${a1}，将签名改为 ${a2}，然后点击登录。`),
