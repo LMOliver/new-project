@@ -33,18 +33,6 @@ export function contributorClient(context) {
 					e('p', link('/drawer', '我想自己收集 token 画图'))
 				),
 			),
-			e('div', {
-				style: computed($ => {
-					const state = $(stateBox);
-					if (state.status === 'resolved') {
-						const url = `https://cdn.luogu.com.cn/upload/usericon/${state.value.uid}.png`;
-						return `background:url(${url})`;
-					}
-					else {
-						return '';
-					}
-				})
-			}),
 		],
 	};
 }
