@@ -2,8 +2,9 @@ import { authState, registerOrLoginWithLuogu, logout, updateState } from '../api
 import { loading } from '../components/loading.js';
 import { element as e, template as t, valueBox } from '../dynamic-dom';
 import { computed, useBox } from '../dynamic/dynamic.js';
-import { encode } from 'base64-arraybuffer';
 import { copyableText } from '../components/copyableText.js';
+import sha256 from 'crypto-js/sha256';
+import encBase64 from 'crypto-js/enc-base64';
 
 const LENGTH = 32;
 /**
@@ -13,8 +14,8 @@ async function getRandomPair() {
 	let array = new Uint8Array(LENGTH);
 	crypto.getRandomValues(array);
 	const secret = [...array].map(x => x.toString(16).padStart(2, '0')).join('');
-	const result = await crypto.subtle.digest('sha-256', new TextEncoder().encode(secret));
-	const slogan = '[Drawer/auth]' + encode(result);
+	const result = sha256(secret).toString(encBase64);
+	const slogan = '[Drawer/auth]' + result;
 	return { slogan, secret };
 };
 

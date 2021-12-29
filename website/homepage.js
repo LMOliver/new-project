@@ -12,6 +12,8 @@ import katexLicense from 'katex/LICENSE?raw';
 import mdItKatexLicense from '@iktakahiro/markdown-it-katex/LICENSE?raw';
 // @ts-ignore
 import imageQLicense from '../node_modules/image-q/LICENSE?raw';
+// @ts-ignore
+import cryptoJSLicense from 'crypto-js/LICENSE?raw';
 /**
  * @typedef {import('../dynamic-dom/types.js').Supported} Supported
  */
@@ -48,6 +50,8 @@ export function homepage({ path }) {
 					e('pre', mdItKatexLicense),
 					e('li', e('a', { href: 'https://www.npmjs.com/package/image-q' }, 'image-q'), '，', 'MIT License'),
 					e('pre', imageQLicense),
+					e('li', e('a', { href: 'https://www.npmjs.com/package/crypto-js' }, 'crypto-js'), '，', 'MIT License'),
+					e('pre', cryptoJSLicense),
 				),
 			),
 			e('details',
