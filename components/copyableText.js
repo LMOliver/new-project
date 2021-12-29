@@ -6,33 +6,39 @@ import { loading } from './loading.js';
  * @param {string} text
  */
 export function copyableText(text) {
-	const [hint, setHint] = useBox(/**@type {import('../dynamic-dom/types.js').Supported}*/('复制'));
-	const button = e('button', {
-		$click: event => {
-			event.preventDefault();
-			setHint(loading(
-				(async () => {
-					try {
-						await navigator.clipboard.writeText(text);
-						return '成功';
-					}
-					catch (_) {
-						return '失败';
-					}
-				})(),
-				() => '复制',
-				() => '',
-				0,
-			));
+	const span = e('span', { style: 'user-select:all;' }, text);
+	if (navigator.clipboard) {
+		const [hint, setHint] = useBox(/**@type {import('../dynamic-dom/types.js').Supported}*/('复制'));
+		const button = e('button', {
+			$click: event => {
+				event.preventDefault();
+				setHint(loading(
+					(async () => {
+						try {
+							await navigator.clipboard.writeText(text);
+							return '成功';
+						}
+						catch (_) {
+							return '失败';
+						}
+					})(),
+					() => '复制',
+					() => '',
+					0,
+				));
+			},
+			$mouseleave: () => {
+				setHint('复制');
+			},
 		},
-		$mouseleave: () => {
-			setHint('复制');
-		},
-	},
-		hint
-	);
-	return e('span',
-		button,
-		e('span', { style: 'user-select:all;' }, text),
-	);
+			hint
+		);
+		return e('span',
+			button,
+			span,
+		);
+	}
+	else {
+		return span;
+	}
 }
