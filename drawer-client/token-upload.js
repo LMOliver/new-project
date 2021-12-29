@@ -56,7 +56,7 @@ function singleUploadForm(uid) {
  */
 function findEntries(text) {
 	// matches 'abcd', 'abcd 1', '"abcd"', '"abcd 1"'
-	const REGEX = /\b(?:[0-9a-f]{40})(?: (?:[1-9]\d{0,7}))?\b/g;
+	const REGEX = /\b(?:[0-9a-zA-Z+\/=]{2,128})(?: (?:[1-9]\d{0,7}))?\b/g;
 	const results = text.match(REGEX) || [];
 	return results.map(x => x.split(' ')).map(x => ({ token: x[0], remark: x[1] || null }));
 }

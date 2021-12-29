@@ -7,21 +7,21 @@ export function tokenSubmitEntryInput() {
 		// type: 'password',
 		style: 'width:30em;max-width:calc(100% - 8px);',
 		required: true,
-		pattern: '^[0-9a-f]{40}$',
+		// pattern: '^[0-9a-f]{40}$',
 	});
-	token.addEventListener('input', () => {
-		if (token.validity.patternMismatch) {
-			token.setCustomValidity('token 应是长度为 40 的十六进制串');
-		}
-		else {
-			token.setCustomValidity('');
-		}
-	});
+	// token.addEventListener('input', () => {
+	// 	if (token.validity.patternMismatch) {
+	// 		token.setCustomValidity('token 应是长度为 40 的十六进制串');
+	// 	}
+	// 	else {
+	// 		token.setCustomValidity('');
+	// 	}
+	// });
 	const uid = e('input', {
 		type: 'text',
-		style: 'width:6em;',
+		style: 'width:10em;',
 		pattern: '^|[1-9]\\d*$',
-		placeholder: '仅用于备注',
+		placeholder: '仅用于备注，可不填写',
 		maxlength: 7,
 	});
 	uid.addEventListener('input', () => {
