@@ -1,9 +1,9 @@
 import { element as e } from '../dynamic-dom/index.js';
 
 const TABLE1 = {
-	invalid: { color: 'red', text: '无效' },
+	invalid: { color: 'red', text: '失效' },
 	busy: { color: 'orange', text: '占用' },
-	waiting: { color: 'blue', text: '可用' },
+	waiting: { color: 'blue', text: '未知' },
 	working: { color: 'green', text: '正常' },
 };
 

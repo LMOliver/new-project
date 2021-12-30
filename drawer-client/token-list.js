@@ -70,7 +70,7 @@ export function tokenList(tokenInfoList, update) {
 	const [hint, setHint] = useBox(/**@type {import('../dynamic-dom/types.js').Supported}*/(fetchAndUpdate()));
 	return [
 		e('p',
-			t`${map(tokenInfoList, list => list.filter(x => x.status === 'working' || x.status === 'waiting').length)} 个有效 token`,
+			t`${map(tokenInfoList, list => list.filter(x => x.status === 'working').length)} 个有效 token`,
 			e('button', {
 				disabled: isLoading,
 				$click: () => setHint(fetchAndUpdate()),
