@@ -16,23 +16,7 @@ export function tokenSubmitEntryInput() {
 			token.setCustomValidity('');
 		}
 	});
-	const uid = e('input', {
-		type: 'text',
-		style: 'width:10em;',
-		pattern: '^|[1-9]\\d*$',
-		placeholder: '仅用于备注，可不填写',
-		maxlength: 7,
-	});
-	uid.addEventListener('input', () => {
-		if (uid.validity.patternMismatch) {
-			uid.setCustomValidity('uid 应是数字');
-		}
-		else {
-			uid.setCustomValidity('');
-		}
-	});
 	const tokenBox = valueBox(token);
-	const uidBox = valueBox(uid);
 	return {
 		element: [
 			e('p', { style: 'margin-top:0;' }, e('a', {
@@ -41,11 +25,10 @@ export function tokenSubmitEntryInput() {
 				rel: 'noopener',
 			}, '洛谷冬日绘板活动页面')),
 			e('p', e('label', 'token: ', token)),
-			e('p', e('label', 'uid: ', uid)),
 		],
 		value: computed($ => ({
 			token: $(tokenBox),
-			remark: $(uidBox) ? $(uidBox) + '@Luogu' : null,
+			remark: $(tokenBox).split(':')[0] + '@Luogu',
 		}))
 	};
 }
