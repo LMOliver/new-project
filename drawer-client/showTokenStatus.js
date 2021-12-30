@@ -4,7 +4,7 @@ const TABLE1 = {
 	invalid: { color: 'red', text: '失效' },
 	busy: { color: 'orange', text: '占用' },
 	waiting: { color: 'blue', text: '未知' },
-	working: { color: 'green', text: '正常' },
+	working: { color: 'green', text: '有效' },
 };
 
 /**
