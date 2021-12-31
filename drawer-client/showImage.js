@@ -32,12 +32,12 @@ export function showImage({ width, height, data }) {
 	let offset = 0;
 	for (let i = 0; i < height; i++) {
 		for (let j = 0; j < width; j++) {
-			index++;
-			offset += 4;
 			const id = /**@type {number}*/ (data.codePointAt(index)) << 2;
 			for (let k = 0; k !== 4; k++) {
 				imageData.data[offset | k] = table[id | k];
 			}
+			index++;
+			offset += 4;
 		}
 	}
 	ctx.putImageData(imageData, 0, 0);
