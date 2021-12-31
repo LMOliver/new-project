@@ -21,7 +21,7 @@ function createTable() {
  * @param {import('../api-client/api.js').TaskImage} param0
  */
 export function showImage({ width, height, data }) {
-	const canvas = e('canvas', { width, height, style: 'image-rendering:pixelated;' });
+	const canvas = e('canvas', { width, height, style: 'image-rendering:pixelated;display:block;' });
 	const ctx = canvas.getContext('2d');
 	if (ctx === null) {
 		throw new Error('canvas is not supported!');
