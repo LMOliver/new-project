@@ -34,11 +34,11 @@ export function updateReceivedTokens() {
 }
 
 /**
- * @param {{token:import('./api.js').PaintToken,remark:string|null,receiver:string}} token 
+ * @param {{token:import('./api.js').PaintToken,receiver:string}} token 
  * @returns {Promise<{isNewToken:boolean}>}
  */
-export async function uploadToken({ token, remark, receiver }) {
-	const result = await JSONRequest(apiPath('/drawer/tokens'), 'POST', { token, remark, receiver });
+export async function uploadToken({ token, receiver }) {
+	const result = await JSONRequest(apiPath('/drawer/tokens'), 'POST', { token, receiver });
 	/** no await */updateReceivedTokens()
 		.then(() => {
 			if (unbox(receivedTokens).some(x => x.status === 'waiting')) {

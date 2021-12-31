@@ -56,19 +56,18 @@ function singleUploadForm(uid) {
  */
 function findEntries(text) {
 	// matches 'abcd', 'abcd 1', '"abcd"', '"abcd 1"'
-	const REGEX = /\b(?:[1-9]\d{0,7}:[a-zA-Z0-9]{16})(?: (?:[1-9]\d{0,7}))?\b/g;
+	const REGEX = /\b[1-9]\d{0,7}:[a-zA-Z0-9]{16}\b/g;
 	const results = text.match(REGEX) || [];
-	return results.map(x => x.split(' ')).map(x => ({ token: x[0], remark: x[1] || null }));
+	return results.map(x => ({ token: x }));
 }
 
 /**
  * @param {string} uid
- * @param {{token:import('../api-client/api.js').PaintToken,remark:string|null}[]} entries 
+ * @param {{token:import('../api-client/api.js').PaintToken}[]} entries 
+ * @param {(item:{token:import('../api-client/api.js').PaintToken,message:string})=>void} reportError
  */
-function multiUploadingProcess(uid, entries) {
-	// console.log(uid, entries);
+function multiUploadingProcess(uid, entries, reportError) {
 	const [progress, set] = useBox(0);
-	const [errors, changeErrors] = useSequence(/**@type {[import('../api-client/api.js').PaintToken,string|null,string][]}*/([]));
 	return {
 		element: [
 			e('progress', {
@@ -77,30 +76,28 @@ function multiUploadingProcess(uid, entries) {
 				value: progress,
 			}),
 			e('span', template`${progress}/${entries.length}`),
-			e('ul', map(errors, ([token, remark, message]) =>
-				e('li',
-					`token=……${token.slice(-6)} ${remark ? `uid=${remark}` : '无 uid'} ${message}`
-				)
-			)),
 		],
 		promise: (async () => {
 			let cnt = 0;
 			for (const qwq of entries) {
-				for (let tries = 0; tries < 4; tries++) {
+				for (let tries = 0; tries < 6; tries++) {
 					try {
-						await uploadToken({ token: qwq.token, remark: qwq.remark ? qwq.remark + '@Luogu' : null, receiver: uid });
+						const { isNewToken } = await uploadToken({ token: qwq.token, receiver: uid });
+						if (!isNewToken) {
+							throw new Error('该 token 已提交过');
+						}
 						break;
 					}
 					catch (error) {
-						// console.error(error);
-						if (tries + 1 < 4) {
+						if (error.message && (error.message.includes('频繁') || error.message.startsWith('5'))) {
 							await new Promise(resolve => setTimeout(resolve, 2 ** tries * 1000));
 						}
 						else {
-							changeErrors([
-								SequenceChangeType.insert, errors.current.length,
-								[qwq.token, qwq.remark, error.message || error.toString()]
-							]);
+							reportError({
+								token: qwq.token,
+								message: error.message || error.toString()
+							});
+							break;
 						}
 					}
 				}
@@ -114,19 +111,32 @@ function multiUploadingProcess(uid, entries) {
  * @param {string} uid
  */
 function multiUploadForm(uid) {
+	const [errors, change] = useSequence(/**@type {{token:string,message:string}[]}*/([]));
 	const uploader = fileUploader('上传 token 文件', {
 		accept: 'text/plain,application/json'
 	}, async file => {
+		while (errors.current.length !== 0) {
+			change([SequenceChangeType.delete, errors.current.length - 1, null]);
+		}
 		set('读取中……');
 		const entries = findEntries(await file.text());
-		const { element, promise } = multiUploadingProcess(uid, entries);
+		const { element, promise } = multiUploadingProcess(uid, entries, item => {
+			change([SequenceChangeType.insert, errors.current.length, item]);
+		});
 		set(element);
 		promise.finally(() => {
 			set(uploader);
 		});
 	});
 	const [qwq, set] = useBox(uploader);
-	return e('p', { style: 'margin-bottom:0;' }, qwq);
+	return e('p', { style: 'margin-bottom:0;' },
+		qwq,
+		e('ul',
+			map(errors, ({ token, message }) =>
+				e('li', `${token} ${message}`)
+			),
+		),
+	);
 }
 
 /**
