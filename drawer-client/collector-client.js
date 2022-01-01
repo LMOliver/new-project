@@ -53,6 +53,7 @@ export function collectorClient(context) {
 							tokenPart(state.uid),
 							e('div', { class: container },
 								e('h3', '任务'),
+								e('p', '为了提高 token 效率，避免冲突，网站管理员可能会手动修改图像的位置。'),
 								taskList(),
 								e('details',
 									e('summary', '新增任务'),
