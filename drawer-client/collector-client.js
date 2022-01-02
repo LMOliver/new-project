@@ -8,6 +8,7 @@ import { element as e, template } from '../dynamic-dom/index.js';
 import { computed } from '../dynamic/dynamic.js';
 import { taskList } from './task-list.js';
 import { taskUploader } from './task-upload.js';
+import { tokenDeleteUI } from './token-delete.js';
 import { tokenList } from './token-list.js';
 import { tokenUploadForm } from './token-upload.js';
 
@@ -32,6 +33,10 @@ function tokenPart(uid) {
 		e('details',
 			e('summary', '提交 token'),
 			tokenUploadForm(uid),
+		),
+		e('details',
+			e('summary', '导出并删除 token'),
+			tokenDeleteUI(),
 		),
 	);
 }

@@ -49,3 +49,13 @@ export async function uploadToken({ token, receiver }) {
 		});
 	return result;
 }
+
+/**
+ * @param {string[]} uids
+ * @returns {Promise<({ok:true,token:string}|{ok:false,reason:string})[]>}
+ */
+export async function deleteTokens(uids) {
+	const result = await JSONRequest(apiPath('/drawer/tokens'), 'DELETE', uids);
+	/** no await */updateReceivedTokens();
+	return result;
+}

@@ -53,10 +53,10 @@ export function createImageElement(blob) {
  * @template U
  * @param {string} url 
  * @param {M} method 
- * @param {M extends 'POST'|'HEAD'|'PUT'?T:undefined} body 
+ * @param {M extends 'POST'|'HEAD'|'PUT'|'DELETE'?T:undefined} body 
  * @returns {U}
  */
-export async function JSONRequest(url, method, body = ['POST', 'HEAD', 'PUT'].includes(method) ? {} : undefined) {
+export async function JSONRequest(url, method, body = ['POST', 'HEAD', 'PUT', 'DELETE'].includes(method) ? {} : undefined) {
 	const result = await fetch(url, {
 		headers: {
 			'Content-Type': 'application/json',
